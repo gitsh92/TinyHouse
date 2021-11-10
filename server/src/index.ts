@@ -16,7 +16,7 @@ app.post('/delete-listing', (req, res) => {
 
     for (let i = 0; i < listings.length; i++) {
         if (listings[i].id === id) {
-            return res.send(listings.splice(i, 1));
+            return res.send(listings.splice(i, 1)[0]);
         }
     }
 
