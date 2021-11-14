@@ -45,6 +45,7 @@ const seed = async () => {
             }
         ];
 
+        db.listings.deleteMany({});
         for (const listing of listings) {
             await db.listings.insertOne(listing);
         }
