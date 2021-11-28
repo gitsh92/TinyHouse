@@ -1,29 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
 import reportWebVitals from './reportWebVitals';
-import { Home, Host, Listing, Listings, NotFound, User } from './sections';
+import { Affix, Layout } from 'antd';
+import {
+  Home,
+  Host,
+  Listing,
+  Listings,
+  NotFound,
+  User,
+  Login,
+  AppHeader
+} from './sections';
+import { Viewer } from './lib/types';
 import './styles/index.css';
 
 const client = new ApolloClient({
   uri: '/api'
 });
 
+const initialViewer: Viewer = {
+  id: null,
+  token: null,
+  avatar: null,
+  hasWallet: null,
+  didRequest: false
+};
+
 const App = () => {
+  const [viewer, setViewer] = useState<Viewer>(initialViewer);
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/host" element={<Host />} />
-        <Route path="/listing/:id" element={<Listing />} />
-        <Route path="/listings/:location" element={<Listings />} />
-        <Route path="/listings" element={<Listings />} />
-        <Route path="/user/:id" element={<User />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Layout id="app">
+        <Affix offsetTop={0} className="app__affix-header">
+          <AppHeader viewer={viewer} setViewer={setViewer} />
+        </Affix>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/host" element={<Host />} />
+          <Route path="/listing/:id" element={<Listing />} />
+          <Route path="/listings/:location" element={<Listings />} />
+          <Route path="/listings" element={<Listings />} />
+          <Route path="/user/:id" element={<User />} />
+          <Route path="/login" element={<Login setViewer={setViewer} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 };
