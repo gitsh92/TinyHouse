@@ -1,5 +1,4 @@
-import React, { FC } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { Layout } from 'antd';
 import logo from './assets/tinyhouse-logo.png';
 
