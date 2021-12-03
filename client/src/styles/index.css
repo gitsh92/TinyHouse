@@ -466,6 +466,7 @@
 .listings {
   padding: 60px 120px;
 }
+
 @media (max-width: 75em) {
   .listings {
     padding-left: 20px;
