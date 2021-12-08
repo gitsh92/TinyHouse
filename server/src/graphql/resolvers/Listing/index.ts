@@ -2,9 +2,11 @@ import { ObjectId } from 'bson';
 import { Request } from 'express';
 import { IResolvers } from 'graphql-tools';
 import { Google } from '../../../lib/api';
-import { Database, Listing, User } from '../../../lib/types';
+import { Database, Listing, ListingType, User } from '../../../lib/types';
 import { authorize } from '../../../lib/utils';
 import {
+  HostListingArgs,
+  HostListingInput,
   ListingArgs,
   ListingBookingsArgs,
   ListingBookingsData,
@@ -13,6 +15,26 @@ import {
   ListingsFilter,
   ListingsQuery
 } from './types';
+
+const verifyHostListingInput = ({
+  title,
+  description,
+  type,
+  price
+}: HostListingInput) => {
+  if (title.length > 100) {
+    throw new Error('Listing title cannot exceed 100 characters');
+  }
+  if (description.length > 5000) {
+    throw new Error('Listing description cannot exceed 5000 characters');
+  }
+  if (type !== ListingType.Apartment && type !== ListingType.House) {
+    throw new Error('Listing type must be either apartment or house');
+  }
+  if (price < 0) {
+    throw new Error('Price cannot be negative');
+  }
+};
 
 export const listingResolvers: IResolvers = {
   Query: {
@@ -89,6 +111,51 @@ export const listingResolvers: IResolvers = {
       } catch (error) {
         throw new Error(`Failed to query listings: ${error}`);
       }
+    }
+  },
+  Mutation: {
+    hostListing: async (
+      _root: undefined,
+      { input }: HostListingArgs,
+      { db, req }: { db: Database; req: Request }
+    ): Promise<Listing> => {
+      verifyHostListingInput(input);
+
+      const viewer = await authorize(db, req);
+      if (!viewer) {
+        throw new Error('Viewer cannot be found');
+      }
+
+      const { country, admin, city } = await Google.geocode(input.address);
+      if (!country || !admin || !city) {
+        throw new Error('Invalid address input');
+      }
+
+      const insertId = new ObjectId();
+      const insertResult = await db.listings.insertOne({
+        _id: insertId,
+        ...input,
+        bookings: [],
+        bookingsIndex: {},
+        country,
+        admin,
+        city,
+        host: viewer._id
+      });
+
+      const insertedListing = await db.listings.findOne({
+        _id: insertId
+      });
+      if (!insertedListing) {
+        throw new Error('Failed to retrieve new listing');
+      }
+
+      await db.users.updateOne(
+        { _id: viewer._id },
+        { $push: { listings: insertedListing._id } }
+      );
+
+      return insertedListing;
     }
   },
   Listing: {
