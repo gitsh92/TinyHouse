@@ -13,7 +13,8 @@ import {
   NotFound,
   User,
   Login,
-  AppHeader
+  AppHeader,
+  Stripe
 } from './sections';
 import { Viewer } from './lib/types';
 import { LOG_IN } from './lib/graphql/mutations';
@@ -93,8 +94,15 @@ const App = () => {
           <Route path="/listing/:id" element={<Listing />} />
           <Route path="/listings/:location" element={<Listings />} />
           <Route path="/listings" element={<Listings />} />
-          <Route path="/user/:id" element={<User viewer={viewer} />} />
+          <Route
+            path="/user/:id"
+            element={<User viewer={viewer} setViewer={setViewer} />}
+          />
           <Route path="/login" element={<Login setViewer={setViewer} />} />
+          <Route
+            path="/stripe"
+            element={<Stripe viewer={viewer} setViewer={setViewer} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Layout>
