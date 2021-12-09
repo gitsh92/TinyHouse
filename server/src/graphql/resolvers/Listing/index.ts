@@ -1,7 +1,7 @@
 import { ObjectId } from 'bson';
 import { Request } from 'express';
 import { IResolvers } from 'graphql-tools';
-import { Google } from '../../../lib/api';
+import { Cloudinary, Google } from '../../../lib/api';
 import { Database, Listing, ListingType, User } from '../../../lib/types';
 import { authorize } from '../../../lib/utils';
 import {
@@ -131,10 +131,13 @@ export const listingResolvers: IResolvers = {
         throw new Error('Invalid address input');
       }
 
+      const imageUrl = await Cloudinary.upload(input.image);
+
       const insertId = new ObjectId();
       const insertResult = await db.listings.insertOne({
         _id: insertId,
         ...input,
+        image: imageUrl,
         bookings: [],
         bookingsIndex: {},
         country,
