@@ -24,6 +24,7 @@ import {
 } from './lib/graphql/mutations/LogIn/__generated__/LogIn';
 import './styles/index.css';
 import { AppHeaderSkeleton, ErrorBanner } from './lib/components';
+import { Elements, StripeProvider } from 'react-stripe-elements';
 
 const client = new ApolloClient({
   uri: '/api',
@@ -82,31 +83,40 @@ const App = () => {
   ) : null;
 
   return (
-    <Router>
-      <Layout id="app">
-        {logInErrorBannerElement}
-        <Affix offsetTop={0} className="app__affix-header">
-          <AppHeader viewer={viewer} setViewer={setViewer} />
-        </Affix>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/host" element={<Host viewer={viewer} />} />
-          <Route path="/listing/:id" element={<Listing />} />
-          <Route path="/listings/:location" element={<Listings />} />
-          <Route path="/listings" element={<Listings />} />
-          <Route
-            path="/user/:id"
-            element={<User viewer={viewer} setViewer={setViewer} />}
-          />
-          <Route path="/login" element={<Login setViewer={setViewer} />} />
-          <Route
-            path="/stripe"
-            element={<Stripe viewer={viewer} setViewer={setViewer} />}
-          />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <StripeProvider apiKey={process.env.REACT_APP_S_PUBLISHABLE_KEY as string}>
+      <Router>
+        <Layout id="app">
+          {logInErrorBannerElement}
+          <Affix offsetTop={0} className="app__affix-header">
+            <AppHeader viewer={viewer} setViewer={setViewer} />
+          </Affix>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/host" element={<Host viewer={viewer} />} />
+            <Route
+              path="/listing/:id"
+              element={
+                <Elements>
+                  <Listing viewer={viewer} />
+                </Elements>
+              }
+            />
+            <Route path="/listings/:location" element={<Listings />} />
+            <Route path="/listings" element={<Listings />} />
+            <Route
+              path="/user/:id"
+              element={<User viewer={viewer} setViewer={setViewer} />}
+            />
+            <Route path="/login" element={<Login setViewer={setViewer} />} />
+            <Route
+              path="/stripe"
+              element={<Stripe viewer={viewer} setViewer={setViewer} />}
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </StripeProvider>
   );
 };
 
