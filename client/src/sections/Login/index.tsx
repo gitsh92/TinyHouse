@@ -10,6 +10,7 @@ import {
 } from '../../lib/graphql/mutations/LogIn/__generated__/LogIn';
 import { AUTH_URL } from '../../lib/graphql/queries/AuthUrl';
 import { AuthUrl as AuthUrlData } from '../../lib/graphql/queries/AuthUrl/__generated__/AuthUrl';
+import { useScrollToTop } from '../../lib/hooks';
 import { Viewer } from '../../lib/types';
 import {
   displayErrorMessage,
@@ -37,6 +38,8 @@ export const Login: FC<Props> = ({ setViewer }) => {
       }
     });
   const logInRef = useRef(logIn);
+
+  useScrollToTop();
 
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code');

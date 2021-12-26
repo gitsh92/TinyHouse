@@ -15,6 +15,7 @@ import sanFransiscoImage from './assets/san-fransisco.jpeg';
 import cancunImage from './assets/cancun.jpeg';
 import { useQuery } from 'react-apollo';
 import { LISTINGS } from '../../lib/graphql/queries';
+import { useScrollToTop } from '../../lib/hooks';
 
 const { Content } = Layout;
 const { Paragraph, Title } = Typography;
@@ -30,9 +31,12 @@ export const Home = () => {
         filter: ListingsFilter.PRICE_HIGH_TO_LOW,
         limit: PAGE_LIMIT,
         page: PAGE_NUMBER
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   );
+
+  useScrollToTop();
 
   const navigate = useNavigate();
 

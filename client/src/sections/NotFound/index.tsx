@@ -1,5 +1,34 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { Empty, Layout, Typography } from 'antd';
+import { Link } from 'react-router-dom';
+import { useScrollToTop } from '../../lib/hooks';
+
+const { Content } = Layout;
+const { Text } = Typography;
 
 export const NotFound = () => {
-  return <h2>NotFound</h2>;
+  useScrollToTop();
+
+  return (
+    <Content className="not-found">
+      <Empty
+        description={
+          <Fragment>
+            <Text className="not-found__description-title">
+              Something went wrong :(
+            </Text>
+            <Text className="not-found__description-subtitle">
+              The page you're looking for can't be found
+            </Text>
+          </Fragment>
+        }
+      />
+      <Link
+        to="/"
+        className="not-found__cta ant-btn ant-btn-primary ant-btn-lg"
+      >
+        Home
+      </Link>
+    </Content>
+  );
 };

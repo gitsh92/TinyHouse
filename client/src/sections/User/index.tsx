@@ -8,6 +8,7 @@ import {
   User as UserData,
   UserVariables
 } from '../../lib/graphql/queries/User/__generated__/User';
+import { useScrollToTop } from '../../lib/hooks';
 import { Viewer } from '../../lib/types';
 import { UserBookings, UserListings, UserProfile } from './components';
 
@@ -32,7 +33,8 @@ export const User: FC<Props> = ({ viewer, setViewer }) => {
         bookingsPage,
         listingsPage,
         limit: PAGE_LIMIT
-      }
+      },
+      fetchPolicy: 'cache-and-network'
     }
   );
 
@@ -46,6 +48,8 @@ export const User: FC<Props> = ({ viewer, setViewer }) => {
   const stripeErrorBanner = stripeError ? (
     <ErrorBanner description="We had an issue connecting with Stripe. Please try again soon." />
   ) : null;
+
+  useScrollToTop();
 
   if (loading) {
     return (

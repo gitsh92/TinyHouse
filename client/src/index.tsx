@@ -25,6 +25,7 @@ import {
 import './styles/index.css';
 import { AppHeaderSkeleton, ErrorBanner } from './lib/components';
 import { Elements, StripeProvider } from 'react-stripe-elements';
+import { useScrollToTop } from './lib/hooks';
 
 const client = new ApolloClient({
   uri: '/api',
@@ -62,6 +63,8 @@ const App = () => {
     }
   });
   const logInRef = useRef(logIn);
+
+  useScrollToTop();
 
   useEffect(() => {
     logInRef.current();

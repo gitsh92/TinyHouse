@@ -16,6 +16,7 @@ import {
   ListingDetails
 } from './components';
 import { Viewer } from '../../lib/types';
+import { useScrollToTop } from '../../lib/hooks';
 
 interface Props {
   viewer: Viewer;
@@ -53,6 +54,8 @@ export const Listing: FC<Props> = ({ viewer }) => {
   const handleListingRefetch = async () => {
     await refetch();
   };
+
+  useScrollToTop();
 
   if (loading) {
     return (

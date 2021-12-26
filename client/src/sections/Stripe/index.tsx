@@ -9,6 +9,7 @@ import {
 import { Navigate, useNavigate } from 'react-router';
 import { Viewer } from '../../lib/types';
 import { displaySuccessNotification } from '../../lib/utils';
+import { useScrollToTop } from '../../lib/hooks';
 
 interface Props {
   viewer: Viewer;
@@ -36,6 +37,8 @@ export const Stripe: FC<Props> = ({ viewer, setViewer }) => {
   });
 
   const connectStripeRef = useRef(connectStripe);
+
+  useScrollToTop();
 
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get('code');
