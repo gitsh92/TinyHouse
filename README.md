@@ -1,5 +1,5 @@
 # tinyhouse
 
-App created with TypeScript, Node/Express, React, and GraphQL.
+Web application created with TypeScript, Node/Express, MongoDB, GraphQL, and React, having followed this [course](https://www.newline.co/tinyhouse).
 
 Deployed here: https://tinyhouse-project.herokuapp.com
