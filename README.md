@@ -1,3 +1,3 @@
 # tinyhouse
 
-Deployed here: https://tinyhouse-project.herokuapp.com
+Deployed [here](https://tinyhouse-project.herokuapp.com)
