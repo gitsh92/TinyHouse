@@ -1,3 +1,3 @@
 # tinyhouse
 
-Deployed [here](https://tinyhouse-project.herokuapp.com)
+Created following a course on TypeScript, Node, React, & GraphQL.
